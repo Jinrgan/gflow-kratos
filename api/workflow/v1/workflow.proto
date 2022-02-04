@@ -1,0 +1,229 @@
+syntax = "proto3";
+
+package greek.gflow.workflow.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "google/api/annotations.proto";
+
+option go_package = "gflow-kratos/api/workflow/v1";
+
+service Workflow {
+  rpc CreateWorkflow (CreateWorkflowRequest) returns (CreateWorkflowResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflow"
+      body: "*"
+    };
+  }
+
+  rpc GetWorkflowDetail (GetWorkflowDetailRequest) returns (GetWorkflowDetailResponse) {
+    option (google.api.http) = {
+      get: "/v1/workflow/detail/{id}"
+    };
+  }
+
+  rpc GetWorkflows (GetWorkflowsRequest) returns (GetWorkflowsResponse) {
+    option (google.api.http) = {
+      get: "/v1/workflows"
+    };
+  }
+
+  rpc UpdateWorkflow (UpdateWorkflowRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/workflow/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DeleteWorkflow (DeleteWorkflowRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/workflow/{id}"
+    };
+  }
+
+  rpc CreateProcess (CreateProcessRequest) returns (CreateProcessResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflow/process"
+      body: "*"
+    };
+  }
+
+  rpc UpdateProcess (UpdateProcessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/workflow/process/{id}"
+      body: "*"
+    };
+  }
+
+  rpc DrawProcesses (DrawProcessesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/workflow/processes/diagram"
+      body: "*"
+    };
+  }
+
+  rpc DeleteProcess (DeleteProcessRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/workflow/process/{id}"
+    };
+  }
+
+  rpc DeleteProcesses (DeleteProcessesRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/workflow/{workflow_id}/processes"
+    };
+  }
+
+  rpc SayHello (HelloRequest) returns (HelloReply)  {
+    option (google.api.http) = {
+        get: "/helloworld/{name}"
+    };
+  }
+}
+
+enum WorkflowType {
+  TYPE_NOT_SPECIFIED = 0;
+}
+
+enum Status {
+  STATUS_NOT_SPECIFIED = 0;
+}
+
+message WorkflowDTO {
+  string id = 1;
+  string name = 2;
+  string describe = 3;
+  WorkflowType type = 4;
+  Status status = 5;
+  int32 sort_order = 6;
+  string created_by = 7;
+  google.protobuf.Duration created_at = 8;
+}
+
+message CreateWorkflowRequest {
+  string name = 1;
+  string describe = 2;
+  int32 sort_order = 3;
+  Status status = 4;
+  WorkflowType type = 5;
+}
+
+message CreateWorkflowResponse {
+  string id = 1;
+}
+
+message GetWorkflowDetailRequest {
+  string id = 1;
+}
+
+message GetWorkflowDetailResponse {
+  WorkflowDTO workflow = 1;
+  repeated ProcessDTO process = 6;
+}
+
+message GetWorkflowsRequest {
+  WorkflowType type = 1;
+}
+
+message GetWorkflowsResponse {
+  repeated WorkflowDTO workflow_dtos = 1;
+}
+
+message UpdateWorkflowRequest {
+  string id = 1;
+  string name = 2;
+  string describe = 3;
+  WorkflowType type = 4;
+  Status status = 5;
+  int32 sort_order = 6;
+}
+
+message DeleteWorkflowRequest {
+  string id = 1;
+}
+
+enum ProcessType {
+  START = 0;
+  STEP = 1;
+}
+
+enum ProcessMode {
+  LINEAR = 0;
+  NEXT_PROCESS_CONDITION = 1;
+  SYNC = 2;
+}
+
+message ProcessDiagram {
+  int32 x_coordinate = 1;
+  int32 y_coordinate = 2;
+  repeated string next_process_ids = 3;
+}
+
+enum ProcessApprovalType {
+  CUSTOM_CHOICE = 0; // 自由选择
+  SPECIFY_APPROVER = 1; // 指定人员
+  SPECIFY_BY_ROLE = 2; // 指定角色
+  TRANSACTION_ACCEPTANCE = 3; // 事务接受
+}
+
+message ProcessDTO {
+  string id = 1;
+  string workflow_id = 2;
+  ProcessType type = 3;
+  string name = 4;
+  string workflow_name = 5;
+  ProcessApprovalType approval_type = 6;
+  repeated string approver_ids = 7;
+  repeated string approver_text = 8;
+  bool allow_countersigned = 9;
+  bool allow_go_back = 10;
+  bool next_process_condition = 11;
+  ProcessDiagram diagram = 12;
+  google.protobuf.Duration updated_at = 13;
+  int32 dateline = 14;
+  ProcessMode mode = 15;
+}
+
+message CreateProcessRequest {
+  string workflow_id = 1;
+}
+
+message CreateProcessResponse {
+  string id = 1;
+}
+
+message UpdateProcessRequest {
+  string id = 1;
+  string workflow_id = 2;
+  ProcessType type = 3;
+  string name = 4;
+  ProcessApprovalType approval_type = 5;
+  repeated string approver_ids = 6;
+  repeated string approver_text = 7;
+  bool allow_countersigned = 8;
+  bool allow_go_back = 9;
+  bool next_process_condition = 10;
+}
+
+message DrawProcessesRequest {
+  string id = 1;
+  repeated ProcessDiagram diagram = 2;
+}
+
+message DeleteProcessRequest {
+  string id = 1;
+}
+
+message DeleteProcessesRequest {
+  string workflow_id = 1;
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}

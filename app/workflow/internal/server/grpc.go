@@ -1,9 +1,9 @@
 package server
 
 import (
-	v1 "gflow-kratos/api/define/v1"
-	"gflow-kratos/app/define/internal/conf"
-	"gflow-kratos/app/define/internal/service"
+	v1 "gflow-kratos/api/workflow/v1"
+	"gflow-kratos/app/workflow/internal/conf"
+	"gflow-kratos/app/workflow/internal/service"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -27,6 +27,6 @@ func NewGRPCServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterGreeterServer(srv, greeter)
+	v1.RegisterWorkflowServer(srv, greeter)
 	return srv
 }

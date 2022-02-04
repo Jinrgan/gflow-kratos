@@ -1,0 +1,399 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/apps/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Workflow API
+    version: 0.0.1
+paths:
+    /helloworld/{name}:
+        get:
+            tags:
+                - Workflow
+            operationId: Workflow_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/HelloReply'
+    /v1/workflow:
+        post:
+            tags:
+                - Workflow
+            operationId: Workflow_CreateWorkflow
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateWorkflowRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateWorkflowResponse'
+    /v1/workflow/detail/{id}:
+        get:
+            tags:
+                - Workflow
+            operationId: Workflow_GetWorkflowDetail
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetWorkflowDetailResponse'
+    /v1/workflow/process:
+        post:
+            tags:
+                - Workflow
+            operationId: Workflow_CreateProcess
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateProcessRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateProcessResponse'
+    /v1/workflow/process/{id}:
+        put:
+            tags:
+                - Workflow
+            operationId: Workflow_UpdateProcess
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateProcessRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+        delete:
+            tags:
+                - Workflow
+            operationId: Workflow_DeleteProcess
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/workflow/processes/diagram:
+        put:
+            tags:
+                - Workflow
+            operationId: Workflow_DrawProcesses
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DrawProcessesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/workflow/{id}:
+        put:
+            tags:
+                - Workflow
+            operationId: Workflow_UpdateWorkflow
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateWorkflowRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+        delete:
+            tags:
+                - Workflow
+            operationId: Workflow_DeleteWorkflow
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/workflow/{workflowId}/processes:
+        delete:
+            tags:
+                - Workflow
+            operationId: Workflow_DeleteProcesses
+            parameters:
+                - name: workflowId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /v1/workflows:
+        get:
+            tags:
+                - Workflow
+            operationId: Workflow_GetWorkflows
+            parameters:
+                - name: type
+                  in: query
+                  schema:
+                    type: integer
+                    format: enum
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetWorkflowsResponse'
+components:
+    schemas:
+        CreateProcessRequest:
+            type: object
+            properties:
+                workflowId:
+                    type: string
+        CreateProcessResponse:
+            type: object
+            properties:
+                id:
+                    type: string
+        CreateWorkflowRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                describe:
+                    type: string
+                sortOrder:
+                    type: integer
+                    format: int32
+                status:
+                    type: integer
+                    format: enum
+                type:
+                    type: integer
+                    format: enum
+        CreateWorkflowResponse:
+            type: object
+            properties:
+                id:
+                    type: string
+        DrawProcessesRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                diagram:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ProcessDiagram'
+        Duration:
+            type: object
+            properties:
+                seconds:
+                    type: integer
+                    description: 'Signed seconds of the span of time. Must be from -315,576,000,000 to +315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years'
+                    format: int64
+                nanos:
+                    type: integer
+                    description: Signed fractions of a second at nanosecond resolution of the span of time. Durations less than one second are represented with a 0 `seconds` field and a positive or negative `nanos` field. For durations of one second or more, a non-zero value for the `nanos` field must be of the same sign as the `seconds` field. Must be from -999,999,999 to +999,999,999 inclusive.
+                    format: int32
+            description: 'A Duration represents a signed, fixed-length span of time represented as a count of seconds and fractions of seconds at nanosecond resolution. It is independent of any calendar and concepts like "day" or "month". It is related to Timestamp in that the difference between two Timestamp values is a Duration and it can be added or subtracted from a Timestamp. Range is approximately +-10,000 years. # Examples Example 1: Compute Duration from two Timestamps in pseudo code.     Timestamp start = ...;     Timestamp end = ...;     Duration duration = ...;     duration.seconds = end.seconds - start.seconds;     duration.nanos = end.nanos - start.nanos;     if (duration.seconds < 0 && duration.nanos > 0) {       duration.seconds += 1;       duration.nanos -= 1000000000;     } else if (duration.seconds > 0 && duration.nanos < 0) {       duration.seconds -= 1;       duration.nanos += 1000000000;     } Example 2: Compute Timestamp from Timestamp + Duration in pseudo code.     Timestamp start = ...;     Duration duration = ...;     Timestamp end = ...;     end.seconds = start.seconds + duration.seconds;     end.nanos = start.nanos + duration.nanos;     if (end.nanos < 0) {       end.seconds -= 1;       end.nanos += 1000000000;     } else if (end.nanos >= 1000000000) {       end.seconds += 1;       end.nanos -= 1000000000;     } Example 3: Compute Duration from datetime.timedelta in Python.     td = datetime.timedelta(days=3, minutes=10)     duration = Duration()     duration.FromTimedelta(td) # JSON Mapping In JSON format, the Duration type is encoded as a string rather than an object, where the string ends in the suffix "s" (indicating seconds) and is preceded by the number of seconds, with nanoseconds expressed as fractional seconds. For example, 3 seconds with 0 nanoseconds should be encoded in JSON format as "3s", while 3 seconds and 1 nanosecond should be expressed in JSON format as "3.000000001s", and 3 seconds and 1 microsecond should be expressed in JSON format as "3.000001s".'
+        GetWorkflowDetailResponse:
+            type: object
+            properties:
+                workflow:
+                    $ref: '#/components/schemas/WorkflowDTO'
+                process:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ProcessDTO'
+        GetWorkflowsResponse:
+            type: object
+            properties:
+                workflowDtos:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/WorkflowDTO'
+        HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+        ProcessDTO:
+            type: object
+            properties:
+                id:
+                    type: string
+                workflowId:
+                    type: string
+                type:
+                    type: integer
+                    format: enum
+                name:
+                    type: string
+                workflowName:
+                    type: string
+                approvalType:
+                    type: integer
+                    format: enum
+                approverIds:
+                    type: array
+                    items:
+                        type: string
+                approverText:
+                    type: array
+                    items:
+                        type: string
+                allowCountersigned:
+                    type: boolean
+                allowGoBack:
+                    type: boolean
+                nextProcessCondition:
+                    type: boolean
+                diagram:
+                    $ref: '#/components/schemas/ProcessDiagram'
+                updatedAt:
+                    $ref: '#/components/schemas/Duration'
+                dateline:
+                    type: integer
+                    format: int32
+                mode:
+                    type: integer
+                    format: enum
+        ProcessDiagram:
+            type: object
+            properties:
+                xCoordinate:
+                    type: integer
+                    format: int32
+                yCoordinate:
+                    type: integer
+                    format: int32
+                nextProcessIds:
+                    type: array
+                    items:
+                        type: string
+        UpdateProcessRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                workflowId:
+                    type: string
+                type:
+                    type: integer
+                    format: enum
+                name:
+                    type: string
+                approvalType:
+                    type: integer
+                    format: enum
+                approverIds:
+                    type: array
+                    items:
+                        type: string
+                approverText:
+                    type: array
+                    items:
+                        type: string
+                allowCountersigned:
+                    type: boolean
+                allowGoBack:
+                    type: boolean
+                nextProcessCondition:
+                    type: boolean
+        UpdateWorkflowRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                describe:
+                    type: string
+                type:
+                    type: integer
+                    format: enum
+                status:
+                    type: integer
+                    format: enum
+                sortOrder:
+                    type: integer
+                    format: int32
+        WorkflowDTO:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                describe:
+                    type: string
+                type:
+                    type: integer
+                    format: enum
+                status:
+                    type: integer
+                    format: enum
+                sortOrder:
+                    type: integer
+                    format: int32
+                createdBy:
+                    type: string
+                createdAt:
+                    $ref: '#/components/schemas/Duration'
+tags:
+    - name: Workflow

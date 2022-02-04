@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"gflow-kratos/app/define/internal/conf"
+	"gflow-kratos/app/workflow/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"

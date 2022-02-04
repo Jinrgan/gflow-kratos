@@ -2,16 +2,16 @@ package service
 
 import (
 	"context"
-	v1 "gflow-kratos/api/define/v1"
+	v1 "gflow-kratos/api/workflow/v1"
 
-	"gflow-kratos/app/define/internal/biz"
+	"gflow-kratos/app/workflow/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
 
 // GreeterService is a greeter service.
 type GreeterService struct {
-	v1.UnimplementedGreeterServer
+	v1.UnimplementedWorkflowServer
 
 	uc  *biz.GreeterUsecase
 	log *log.Helper

@@ -2,7 +2,7 @@ package data
 
 import (
 	"context"
-	"gflow-kratos/app/define/internal/biz"
+	"gflow-kratos/app/workflow/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
