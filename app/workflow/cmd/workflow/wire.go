@@ -6,11 +6,12 @@
 package main
 
 import (
-	"define/internal/biz"
-	"define/internal/conf"
-	"define/internal/data"
-	"define/internal/server"
-	"define/internal/service"
+	"gflow-kratos/app/workflow/internal/biz"
+	"gflow-kratos/app/workflow/internal/conf"
+	"gflow-kratos/app/workflow/internal/data"
+	"gflow-kratos/app/workflow/internal/server"
+	"gflow-kratos/app/workflow/internal/service"
+
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"

@@ -1,7 +1,7 @@
 package server
 
 import (
-	v1 "gflow-kratos/api/workflow/v1"
+	pb "gflow-kratos/api/workflow/v1"
 	"gflow-kratos/app/workflow/internal/conf"
 	"gflow-kratos/app/workflow/internal/service"
 
@@ -10,8 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
-// NewHTTPServer new a HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+// NewHTTPServer new an HTTP server.
+func NewHTTPServer(c *conf.Server, svc *service.WorkflowService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -27,6 +27,6 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterWorkflowHTTPServer(srv, greeter)
+	pb.RegisterWorkflowHTTPServer(srv, svc)
 	return srv
 }

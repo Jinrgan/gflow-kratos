@@ -2,7 +2,7 @@
 // versions:
 // protoc-gen-go-http v2.1.3
 
-package v1
+package pb
 
 import (
 	context "context"
@@ -27,7 +27,6 @@ type WorkflowHTTPServer interface {
 	DrawProcesses(context.Context, *DrawProcessesRequest) (*emptypb.Empty, error)
 	GetWorkflowDetail(context.Context, *GetWorkflowDetailRequest) (*GetWorkflowDetailResponse, error)
 	GetWorkflows(context.Context, *GetWorkflowsRequest) (*GetWorkflowsResponse, error)
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	UpdateProcess(context.Context, *UpdateProcessRequest) (*emptypb.Empty, error)
 	UpdateWorkflow(context.Context, *UpdateWorkflowRequest) (*emptypb.Empty, error)
 }
@@ -44,7 +43,6 @@ func RegisterWorkflowHTTPServer(s *http.Server, srv WorkflowHTTPServer) {
 	r.PUT("/v1/workflow/processes/diagram", _Workflow_DrawProcesses0_HTTP_Handler(srv))
 	r.DELETE("/v1/workflow/process/{id}", _Workflow_DeleteProcess0_HTTP_Handler(srv))
 	r.DELETE("/v1/workflow/{workflow_id}/processes", _Workflow_DeleteProcesses0_HTTP_Handler(srv))
-	r.GET("/helloworld/{name}", _Workflow_SayHello0_HTTP_Handler(srv))
 }
 
 func _Workflow_CreateWorkflow0_HTTP_Handler(srv WorkflowHTTPServer) func(ctx http.Context) error {
@@ -255,28 +253,6 @@ func _Workflow_DeleteProcesses0_HTTP_Handler(srv WorkflowHTTPServer) func(ctx ht
 	}
 }
 
-func _Workflow_SayHello0_HTTP_Handler(srv WorkflowHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in HelloRequest
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, "/greek.gflow.workflow.v1.Workflow/SayHello")
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.SayHello(ctx, req.(*HelloRequest))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*HelloReply)
-		return ctx.Result(200, reply)
-	}
-}
-
 type WorkflowHTTPClient interface {
 	CreateProcess(ctx context.Context, req *CreateProcessRequest, opts ...http.CallOption) (rsp *CreateProcessResponse, err error)
 	CreateWorkflow(ctx context.Context, req *CreateWorkflowRequest, opts ...http.CallOption) (rsp *CreateWorkflowResponse, err error)
@@ -286,7 +262,6 @@ type WorkflowHTTPClient interface {
 	DrawProcesses(ctx context.Context, req *DrawProcessesRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	GetWorkflowDetail(ctx context.Context, req *GetWorkflowDetailRequest, opts ...http.CallOption) (rsp *GetWorkflowDetailResponse, err error)
 	GetWorkflows(ctx context.Context, req *GetWorkflowsRequest, opts ...http.CallOption) (rsp *GetWorkflowsResponse, err error)
-	SayHello(ctx context.Context, req *HelloRequest, opts ...http.CallOption) (rsp *HelloReply, err error)
 	UpdateProcess(ctx context.Context, req *UpdateProcessRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 	UpdateWorkflow(ctx context.Context, req *UpdateWorkflowRequest, opts ...http.CallOption) (rsp *emptypb.Empty, err error)
 }
@@ -395,19 +370,6 @@ func (c *WorkflowHTTPClientImpl) GetWorkflows(ctx context.Context, in *GetWorkfl
 	pattern := "/v1/workflows"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/greek.gflow.workflow.v1.Workflow/GetWorkflows"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *WorkflowHTTPClientImpl) SayHello(ctx context.Context, in *HelloRequest, opts ...http.CallOption) (*HelloReply, error) {
-	var out HelloReply
-	pattern := "/helloworld/{name}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation("/greek.gflow.workflow.v1.Workflow/SayHello"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

@@ -4,7 +4,7 @@
 // - protoc             v3.19.1
 // source: workflow.proto
 
-package v1
+package pb
 
 import (
 	context "context"
@@ -33,7 +33,6 @@ type WorkflowClient interface {
 	DrawProcesses(ctx context.Context, in *DrawProcessesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteProcess(ctx context.Context, in *DeleteProcessRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DeleteProcesses(ctx context.Context, in *DeleteProcessesRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 }
 
 type workflowClient struct {
@@ -134,15 +133,6 @@ func (c *workflowClient) DeleteProcesses(ctx context.Context, in *DeleteProcesse
 	return out, nil
 }
 
-func (c *workflowClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
-	out := new(HelloReply)
-	err := c.cc.Invoke(ctx, "/greek.gflow.workflow.v1.Workflow/SayHello", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // WorkflowServer is the server API for Workflow service.
 // All implementations must embed UnimplementedWorkflowServer
 // for forward compatibility
@@ -157,7 +147,6 @@ type WorkflowServer interface {
 	DrawProcesses(context.Context, *DrawProcessesRequest) (*emptypb.Empty, error)
 	DeleteProcess(context.Context, *DeleteProcessRequest) (*emptypb.Empty, error)
 	DeleteProcesses(context.Context, *DeleteProcessesRequest) (*emptypb.Empty, error)
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	mustEmbedUnimplementedWorkflowServer()
 }
 
@@ -194,9 +183,6 @@ func (UnimplementedWorkflowServer) DeleteProcess(context.Context, *DeleteProcess
 }
 func (UnimplementedWorkflowServer) DeleteProcesses(context.Context, *DeleteProcessesRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteProcesses not implemented")
-}
-func (UnimplementedWorkflowServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
 }
 func (UnimplementedWorkflowServer) mustEmbedUnimplementedWorkflowServer() {}
 
@@ -391,24 +377,6 @@ func _Workflow_DeleteProcesses_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Workflow_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(WorkflowServer).SayHello(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/greek.gflow.workflow.v1.Workflow/SayHello",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WorkflowServer).SayHello(ctx, req.(*HelloRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Workflow_ServiceDesc is the grpc.ServiceDesc for Workflow service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -455,10 +423,6 @@ var Workflow_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteProcesses",
 			Handler:    _Workflow_DeleteProcesses_Handler,
-		},
-		{
-			MethodName: "SayHello",
-			Handler:    _Workflow_SayHello_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

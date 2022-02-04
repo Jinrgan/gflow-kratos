@@ -6,7 +6,7 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/duration.proto";
 import "google/api/annotations.proto";
 
-option go_package = "gflow-kratos/api/workflow/v1";
+option go_package = "gflow-kratos/api/workflow/v1;pb";
 
 service Workflow {
   rpc CreateWorkflow (CreateWorkflowRequest) returns (CreateWorkflowResponse) {
@@ -73,12 +73,6 @@ service Workflow {
       delete: "/v1/workflow/{workflow_id}/processes"
     };
   }
-
-  rpc SayHello (HelloRequest) returns (HelloReply)  {
-    option (google.api.http) = {
-        get: "/helloworld/{name}"
-    };
-  }
 }
 
 enum WorkflowType {
@@ -103,7 +97,7 @@ message WorkflowDTO {
 message CreateWorkflowRequest {
   string name = 1;
   string describe = 2;
-  int32 sort_order = 3;
+  uint32 sort_order = 3;
   Status status = 4;
   WorkflowType type = 5;
 }
@@ -177,7 +171,7 @@ message ProcessDTO {
   repeated string approver_text = 8;
   bool allow_countersigned = 9;
   bool allow_go_back = 10;
-  bool next_process_condition = 11;
+  string next_process_condition = 11;
   ProcessDiagram diagram = 12;
   google.protobuf.Duration updated_at = 13;
   int32 dateline = 14;
@@ -216,14 +210,4 @@ message DeleteProcessRequest {
 
 message DeleteProcessesRequest {
   string workflow_id = 1;
-}
-
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
-}
-
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
 }

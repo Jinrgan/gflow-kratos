@@ -3,7 +3,7 @@ syntax = "proto3";
 package greek.gflow.workflow.v1;
 import "errors/errors.proto";
 
-option go_package = "gflow-kratos/api/workflow/v1";
+option go_package = "gflow-kratos/api/workflow/v1;pb";
 option java_multiple_files = true;
 
 enum ErrorReason {

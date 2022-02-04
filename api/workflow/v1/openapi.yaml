@@ -6,24 +6,6 @@ info:
     title: Workflow API
     version: 0.0.1
 paths:
-    /helloworld/{name}:
-        get:
-            tags:
-                - Workflow
-            operationId: Workflow_SayHello
-            parameters:
-                - name: name
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/HelloReply'
     /v1/workflow:
         post:
             tags:
@@ -217,7 +199,7 @@ components:
                     type: string
                 sortOrder:
                     type: integer
-                    format: int32
+                    format: uint32
                 status:
                     type: integer
                     format: enum
@@ -266,12 +248,6 @@ components:
                     type: array
                     items:
                         $ref: '#/components/schemas/WorkflowDTO'
-        HelloReply:
-            type: object
-            properties:
-                message:
-                    type: string
-            description: The response message containing the greetings
         ProcessDTO:
             type: object
             properties:
@@ -302,7 +278,7 @@ components:
                 allowGoBack:
                     type: boolean
                 nextProcessCondition:
-                    type: boolean
+                    type: string
                 diagram:
                     $ref: '#/components/schemas/ProcessDiagram'
                 updatedAt:
