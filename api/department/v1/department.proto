@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package greek.gflow.department.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "google/api/annotations.proto";
+
+option go_package = "gflow-kratos/api/department/v1;pb";
+
+service Department {
+  rpc GetDepartments (google.protobuf.Empty) returns (GetDepartmentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/departments"
+    };
+  }
+}
+
+message DepartmentDTO {
+  string id = 1;
+  string parent_id = 2;
+  int32 order = 3;
+  string name = 4;
+  string leader_id = 5;
+  string phone = 6;
+  string created_by = 7;
+  google.protobuf.Duration created_at = 8;
+  string updated_by = 9;
+  google.protobuf.Duration updated_at = 10;
+}
+
+message GetDepartmentsResponse {
+  repeated DepartmentDTO departments = 1;
+  int32 total = 2;
+}
