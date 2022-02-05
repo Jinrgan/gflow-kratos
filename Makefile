@@ -4,6 +4,7 @@ APP_RELATIVE_PATH=$(shell a=`basename $$PWD` && cd .. && b=`basename $$PWD` && e
 INTERNAL_PROTO_FILES=$(shell find internal -name *.proto)
 API_PROTO_FILES=$(shell find api -name *.proto)
 PROTO_PATH=./api/$(DOMAIN)/v1
+CONF_PROTO_PATH=./app/$(DOMAIN)/internal/conf
 
 .PHONY: init
 # init env
@@ -27,10 +28,10 @@ errors:
 .PHONY: config
 # generate internal proto
 config:
-	protoc --proto_path=. \
+	protoc --proto_path=$(CONF_PROTO_PATH) \
 	       --proto_path=./third_party \
- 	       --go_out=paths=source_relative:. \
-	       $(INTERNAL_PROTO_FILES)
+ 	       --go_out=paths=source_relative:$(CONF_PROTO_PATH) \
+	       conf.proto
 
 .PHONY: api
 # generate api proto

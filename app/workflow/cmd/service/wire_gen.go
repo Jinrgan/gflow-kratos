@@ -14,12 +14,13 @@ import (
 	"gflow-kratos/app/workflow/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger, tracerProvider *trace.TracerProvider) (*kratos.App, func(), error) {
 	db := data.NewGormDB(confData, logger)
 	dataData, cleanup, err := data.NewData(db, logger)
 	if err != nil {
@@ -30,8 +31,8 @@ func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	processRepo := data.NewProcessRepo(dataData, logger)
 	processUseCase := biz.NewProcessUseCase(processRepo, logger)
 	workflowService := service.NewWorkflowService(workflowUseCase, processUseCase, logger)
-	httpServer := server.NewHTTPServer(confServer, workflowService, logger)
-	grpcServer := server.NewGRPCServer(confServer, workflowService, logger)
+	httpServer := server.NewHTTPServer(confServer, workflowService, logger, tracerProvider)
+	grpcServer := server.NewGRPCServer(confServer, workflowService, logger, tracerProvider)
 	app := newApp(logger, httpServer, grpcServer)
 	return app, func() {
 		cleanup()

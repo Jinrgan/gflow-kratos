@@ -4,6 +4,11 @@ import (
 	"flag"
 	"os"
 
+	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/sdk/resource"
+	traceSDK "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
+
 	"gflow-kratos/app/workflow/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
@@ -71,8 +76,18 @@ func main() {
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
+	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(bc.Trace.Endpoint)))
+	if err != nil {
+		panic(err)
+	}
+	tp := traceSDK.NewTracerProvider(
+		traceSDK.WithBatcher(exp),
+		traceSDK.WithResource(resource.NewSchemaless(
+			semconv.ServiceNameKey.String(Name),
+		)),
+	)
 
-	app, cleanup, err := initApp(bc.Server, bc.Data, logger)
+	app, cleanup, err := initApp(bc.Server, bc.Data, logger, tp)
 	if err != nil {
 		panic(err)
 	}

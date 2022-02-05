@@ -7,6 +7,9 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/go-kratos/kratos/v2 v2.1.5
 	github.com/google/wire v0.5.0
+	go.opentelemetry.io/otel v1.3.0
+	go.opentelemetry.io/otel/exporters/jaeger v1.3.0
+	go.opentelemetry.io/otel/sdk v1.3.0
 	google.golang.org/genproto v0.0.0-20220202230416-2a053f022f0d
 	google.golang.org/grpc v1.44.0
 	google.golang.org/protobuf v1.27.1
@@ -37,7 +40,6 @@ require (
 	github.com/opencontainers/image-spec v1.0.2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
-	go.opentelemetry.io/otel v1.3.0 // indirect
 	go.opentelemetry.io/otel/trace v1.3.0 // indirect
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
