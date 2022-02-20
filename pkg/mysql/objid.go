@@ -37,6 +37,10 @@ func ObjectIdToUserId(oid ObjectId) id.UserId {
 	return id.UserId(strconv.FormatUint(uint64(oid), 10))
 }
 
+func ObjectIdToOrganizationId(oid ObjectId) id.OrganizationId {
+	return id.OrganizationId(strconv.FormatUint(uint64(oid), 10))
+}
+
 func ObjectIdToDepartmentId(oid ObjectId) id.DepartmentId {
 	return id.DepartmentId(strconv.FormatUint(uint64(oid), 10))
 }
@@ -73,4 +77,8 @@ func ObjectIdToWorkflowLogId(oid ObjectId) id.WorkflowLogId {
 
 func ObjectIDToWorkflowApproverId(oid ObjectId) id.WorkflowApproverId {
 	return id.WorkflowApproverId(strconv.FormatUint(uint64(oid), 10))
+}
+
+func ObjectIdToHandoverId(oid ObjectId) id.ShiftId {
+	return id.ShiftId(strconv.FormatUint(uint64(oid), 10))
 }

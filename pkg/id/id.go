@@ -7,6 +7,12 @@ func (i UserId) String() string {
 	return string(i)
 }
 
+type OrganizationId string
+
+func (i OrganizationId) String() string {
+	return string(i)
+}
+
 type DepartmentId string
 
 func (i DepartmentId) String() string {
@@ -65,5 +71,11 @@ func (i WorkflowLogId) String() string {
 type WorkflowApproverId string
 
 func (i WorkflowApproverId) String() string {
+	return string(i)
+}
+
+type ShiftId string
+
+func (i ShiftId) String() string {
 	return string(i)
 }

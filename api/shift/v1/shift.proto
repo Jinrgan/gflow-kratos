@@ -1,0 +1,124 @@
+syntax = "proto3";
+package bbm.mci.shift.v1;
+option go_package = "shift/api/v1;pb";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+// 想要使用 proto 生成 http 代码的话文件中需要 import "google/api/annotations.proto";
+import "google/api/annotations.proto";
+
+enum PlanType {
+  PLAN_TYPE_UNSPECIFIED = 0;
+  PLAN_TYPE_PATROL_PLAN = 1;
+  PLAN_TYPE_PRODUCTION_PLAN = 2;
+  PLAN_TYPE_MAINTENANCE_PLAN = 3;
+}
+
+message Affair {
+  string mci_schedule_id = 1;
+  PlanType plan_type = 2;
+  string plan_id = 3;
+}
+
+// message AffairEntity {
+//   string id = 1;
+//   Affair affair = 2;
+// }
+
+message AffairVO {
+  string mci_schedule_id = 1;
+  string mci_schedule_name = 2;
+  PlanType plan_type = 3;
+  string plan_id = 4;
+}
+
+// message CreateAffairRequest {
+//   string schedule_id = 1;
+//   PlanType plan_type = 2;
+//   string plan_id = 3;
+// }
+
+message GetAffairsResponse {
+  repeated Affair affairs = 1;
+}
+
+message Shift {
+  string affair_id = 1;
+  string task_id = 2;
+  string schedule_id = 3;
+  string schedule_name = 4;
+  string reporter_id = 5;
+  string reporter_name = 6;
+  string successor_id = 7;
+  string successor_name = 8;
+  string organization_id = 9;
+  string organization_name = 10;
+  string department_id = 11;
+  string department_name = 12;
+  string location_id = 13;
+  string location_name = 14;
+  string shift_name = 15;
+  string form_id = 16;
+  string speech_recognition = 17;
+  repeated string picture_paths = 18;
+  google.protobuf.Duration date_sec = 19;
+}
+
+message CreateShiftRequest {
+  string affair_id = 1;
+  string task_id = 2;
+  string schedule_id = 3;
+  string schedule_name = 4;
+  string reporter_id = 5;
+  string reporter_name = 6;
+  string successor_id = 7;
+  string successor_name = 8;
+  string organization_id = 9;
+  string organization_name = 10;
+  string department_id = 11;
+  string department_name = 12;
+  string location_id = 13;
+  string location_name = 14;
+  string shift_name = 15;
+  string form_id = 16;
+  string speech_recognition = 17;
+  repeated string picture_paths = 18;
+}
+
+message GetShiftsResponse {
+  repeated Shift handovers = 1;
+}
+
+service ShiftService {
+  rpc CreateAffair (Affair) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/affair"
+      body: "*"
+    };
+  }
+
+  rpc GetAffairByCurrentUser (google.protobuf.Empty) returns (Affair) {
+    option (google.api.http) = {
+      get: "/v1/affair/current-user"
+    };
+  }
+
+  rpc GetAffairs (google.protobuf.Empty) returns (GetAffairsResponse) {
+    option (google.api.http) = {
+      get: "/v1/affairs"
+    };
+  }
+
+  rpc CreateShift (CreateShiftRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/shift"
+      body: "*"
+    };
+  }
+
+  rpc GetShifts (google.protobuf.Empty) returns (GetShiftsResponse) {
+    option (google.api.http) = {
+      get: "/v1/shifts"
+    };
+  }
+}
